@@ -1,0 +1,27 @@
+{
+  "gameType": "GameTypeA",
+  "version": "1.0.0",
+  "description": "First game type configuration",
+  "systems": [
+    "RenderingSystem.dll",
+    "PhysicsSystem.dll"
+  ],
+  "assets": {
+    "sprites": [
+      "player.png",
+      "enemy.png"
+    ],
+    "tilesets": [
+      "tileset_basic.png"
+    ],
+    "sounds": [
+      "background_music.ogg",
+      "jump.wav"
+    ]
+  },
+  "gameRules": {
+    "playerSpeed": 5.0,
+    "gravity": 9.8,
+    "jumpForce": 10.0
+  }
+}

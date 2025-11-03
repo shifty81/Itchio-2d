@@ -1,0 +1,22 @@
+{
+  "gameType": "GameTypeB",
+  "version": "1.0.0",
+  "description": "Second game type configuration with different systems",
+  "systems": [
+    "RenderingSystem.dll",
+    "AISystem.dll"
+  ],
+  "assets": {
+    "sprites": [
+      "character.png",
+      "npc.png"
+    ],
+    "sounds": [
+      "ambient.ogg"
+    ]
+  },
+  "gameRules": {
+    "difficulty": "hard",
+    "aiUpdateRate": 0.1
+  }
+}
