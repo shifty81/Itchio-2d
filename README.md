@@ -17,6 +17,20 @@ A modular, data-driven 2D game engine for Windows with hot-swappable systems and
 - Visual Studio 2017+ (or compatible C++17 compiler)
 - Windows SDK
 
+### Verify Build Environment
+
+Before building, you can verify your environment:
+
+**Linux/macOS:**
+```bash
+./verify_build.sh
+```
+
+**Windows:**
+```cmd
+verify_build.bat
+```
+
 ### Building
 
 ```bash
