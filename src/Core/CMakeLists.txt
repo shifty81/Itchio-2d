@@ -34,3 +34,17 @@ else()
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     )
 endif()
+
+# Test executable for System Manager
+add_executable(TestSystemManager TestSystemManager.cpp)
+target_link_libraries(TestSystemManager ItchioCore)
+set_target_properties(TestSystemManager PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+# Game Type Switcher Demo
+add_executable(GameTypeSwitcherDemo GameTypeSwitcherDemo.cpp)
+target_link_libraries(GameTypeSwitcherDemo ItchioCore)
+set_target_properties(GameTypeSwitcherDemo PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
