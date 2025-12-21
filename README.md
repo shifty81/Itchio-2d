@@ -44,8 +44,9 @@ See **[docs/README.md](docs/README.md)** for a complete documentation index.
 The `/scripts` directory contains helpful tools:
 
 - **[extract_map.sh](scripts/extract_map.sh)**: Automated map extraction tool for Project Zomboid
-  - Extracts vanilla maps for editing and customization
-  - Provides manual extraction guide if automated tools are unavailable
+  - Extracts Build 41.78 vanilla maps from Unjammer/PZ_Vanilla_Map-B41-
+  - Downloads 2841 map cells with 117,441 rooms pre-extracted
+  - Outputs to `scripts/extracted_maps/` directory for immediate use
   - See [scripts/README.md](scripts/README.md) for usage instructions
 
 ## Quick Start

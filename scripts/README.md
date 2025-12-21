@@ -6,21 +6,21 @@ This directory contains utility scripts for The Infection mod development and ma
 
 ### extract_map.sh
 
-Automates the extraction of Project Zomboid's vanilla map data according to the documentation in `docs/MAP_MODDING.md`.
+Automates the extraction of Project Zomboid Build 41.78 vanilla map data from the Unjammer/PZ_Vanilla_Map-B41- repository.
 
 **Purpose:**
-- Downloads the community Vanilla Map Exporter tool
-- Extracts map files in TMX/TBX format
-- Prepares maps for editing with TileZed
+- Downloads pre-extracted Project Zomboid vanilla maps (Build 41.78)
+- Extracts 2841 map cells with 117,441 rooms
+- Provides maps in TMX/TBX format for editing with WorldEd/TileZed
 
 **Prerequisites:**
 - Git must be installed
-- Sufficient disk space (~1GB+)
+- Sufficient disk space (~2GB+)
 - Internet connection
 
 **Usage:**
 ```bash
-# Extract maps to default location (./extracted_maps)
+# Extract maps to default location (scripts/extracted_maps)
 ./scripts/extract_map.sh
 
 # Extract maps to custom location
@@ -29,20 +29,32 @@ Automates the extraction of Project Zomboid's vanilla map data according to the 
 
 **What it does:**
 1. Checks for required tools (Git)
-2. Clones the [Vanilla Map Exporter](https://github.com/cocolabs/pz-vanilla-map-project)
-3. Copies extracted map files to the output directory
+2. Clones the [Unjammer/PZ_Vanilla_Map-B41-](https://github.com/Unjammer/PZ_Vanilla_Map-B41-) repository
+3. Copies all map files, including:
+   - 2841 TMX map cells in the tmx/ directory
+   - Kentucky_full.pzw world file for WorldEd
+   - Map reference images (PNG)
+   - Map directories (Challenge, Kingsmouth, KnoxCounty, etc.)
 4. Provides instructions for next steps
 
 **Output:**
 - Extracted map files in TMX/TBX format
-- Ready for editing in TileZed
+- Ready for editing in WorldEd or TileZed
 - Can be integrated into The Infection mod
+
+**Repository Information:**
+- **Repository:** https://github.com/Unjammer/PZ_Vanilla_Map-B41-
+- **Build Version:** Project Zomboid 41.78 (stable)
+- **Export Details:** 2841 cells exported, 117,441 rooms
+- **Format:** TMX (map cells) and TBX (building/room data)
+- **Note:** Exported using private tools via reverse engineering
 
 **Next Steps After Extraction:**
 1. Review extracted files in the output directory
-2. Open files with TileZed (found in `ProjectZomboid/Tools/TileZed/`)
-3. Edit maps according to your needs
+2. Open Kentucky_full.pzw with WorldEd (found in `ProjectZomboid/Tools/WorldEd/`)
+3. Edit individual cells with TileZed (found in `ProjectZomboid/Tools/TileZed/`)
 4. Follow `docs/MAP_MODDING.md` for integration instructions
+5. Note: You'll need proper tilesheets to edit maps (see REPOSITORY_README.md in output)
 
 **Related Documentation:**
 - `docs/MAP_MODDING.md` - Complete map modding guide
