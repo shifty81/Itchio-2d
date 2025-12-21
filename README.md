@@ -34,7 +34,10 @@ Comprehensive guides are available in the `/docs` folder:
 - **[MOD_OVERVIEW.md](docs/MOD_OVERVIEW.md)**: Detailed concept and gameplay mechanics
 - **[MODDING_GUIDE.md](docs/MODDING_GUIDE.md)**: Step-by-step guide to creating the mod
 - **[TECHNICAL_IMPLEMENTATION.md](docs/TECHNICAL_IMPLEMENTATION.md)**: Implementation details and code examples
+- **[MAP_MODDING.md](docs/MAP_MODDING.md)**: Map extraction and custom area creation
 - **[RESOURCES.md](docs/RESOURCES.md)**: Links to wikis, documentation, and community resources
+
+See **[docs/README.md](docs/README.md)** for a complete documentation index.
 
 ## Quick Start
 
