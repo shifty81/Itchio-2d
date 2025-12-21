@@ -1,100 +1,63 @@
-# Itchio-2d
+# The Infection - Project Zomboid Total Conversion Mod
 
-A modular, data-driven 2D game engine for Windows with hot-swappable systems and multi-API graphics support.
+A total conversion mod for Project Zomboid that transforms the zombie survival experience into a timed survival game with a dramatic "Infection Event" mechanic.
 
-## Features
+## Concept Overview
 
-- **Modular Architecture**: Hot-swappable game systems via DLLs
-- **Graphics Abstraction**: Support for DirectX 11, DirectX 12, and OpenGL
-- **Data-Driven Design**: JSON-based configuration for game types and assets
-- **Native Windows**: Built on Win32 API for high performance
-- **Flexible Asset Management**: Drop-in support for different game types
+This mod fundamentally changes the Project Zomboid gameplay loop:
+
+### Before the Infection
+- **No zombies** spawn on the map initially
+- Players can explore, build, and gather resources freely
+- The world is peaceful but tension builds as the Infection Event approaches
+- Time to prepare your defenses and fortify your base
+
+### After the Infection Event
+- **Everything outside your walls becomes hostile**
+- All entities attempt to break through your defenses
+- Waves of enemies bash against your barricades and walls
+- Survival depends on the quality of your preparations
+
+## Key Features
+
+1. **Zero Initial Zombie Spawning**: Complete removal of zombies until the Infection Event triggers
+2. **Timed Event System**: Configurable countdown to the Infection Event
+3. **Wall Defense Mechanics**: Entities actively target and attack player-built structures
+4. **Base Protection Zones**: Areas within player-defined walls remain safe
+5. **Hostile Entity Spawning**: Mass spawn of aggressive entities when the event triggers
+6. **Wave-Based Attacks**: Progressive difficulty with enemies attempting to breach defenses
+
+## Documentation
+
+Comprehensive guides are available in the `/docs` folder:
+
+- **[MOD_OVERVIEW.md](docs/MOD_OVERVIEW.md)**: Detailed concept and gameplay mechanics
+- **[MODDING_GUIDE.md](docs/MODDING_GUIDE.md)**: Step-by-step guide to creating the mod
+- **[TECHNICAL_IMPLEMENTATION.md](docs/TECHNICAL_IMPLEMENTATION.md)**: Implementation details and code examples
+- **[RESOURCES.md](docs/RESOURCES.md)**: Links to wikis, documentation, and community resources
 
 ## Quick Start
 
-### Prerequisites
-- CMake 3.15+
-- Visual Studio 2017+ (or compatible C++17 compiler)
-- Windows SDK
+1. Review the documentation in `/docs` to understand the mod architecture
+2. Set up your Project Zomboid modding environment
+3. Follow the implementation guide to build core features
+4. Test and iterate on the gameplay mechanics
 
-### Verify Build Environment
+## Development Status
 
-Before building, you can verify your environment:
+This is a design document and implementation guide for creating the mod. Development is in the planning phase.
 
-**Linux/macOS:**
-```bash
-./verify_build.sh
-```
+## Requirements
 
-**Windows:**
-```cmd
-verify_build.bat
-```
+- Project Zomboid (Build 41 or 42)
+- Basic understanding of Lua scripting
+- Familiarity with Project Zomboid's modding API
+- Knowledge of the mod folder structure
 
-### Building
+## Contributing
 
-```bash
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-```
-
-### Running
-
-```bash
-cd build/bin
-./Itchio2DEngine.exe
-```
-
-## Project Structure
-
-```
-Itchio-2d/
-├── src/
-│   ├── Core/              # Core engine (Engine, SystemManager, AssetManager, GAL)
-│   ├── Systems/           # Example game systems (as DLLs)
-│   └── Modules/           # Additional modules
-├── config/                # Game type configurations (JSON)
-├── docs/                  # Documentation
-│   └── ARCHITECTURE.md    # Detailed architecture documentation
-└── GameData/              # Runtime game data (auto-generated)
-    ├── GameTypeA/
-    ├── GameTypeB/
-    └── Library/
-```
-
-## Architecture
-
-This engine implements a modular, data-driven architecture with:
-
-1. **Core Application Framework** (C++ with Win32)
-2. **Graphics Abstraction Layer** (DirectX 11/12, OpenGL)
-3. **Dynamic System Loading** (Hot-swappable DLL modules)
-4. **Entity Component System** (Modular game functionality)
-5. **Data-Driven Asset Management** (JSON configuration)
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed documentation.
-
-## Switching Game Types
-
-Edit `src/Core/Main.cpp`:
-
-```cpp
-EngineConfig config;
-config.gameType = "GameTypeA";  // or "GameTypeB"
-config.graphicsAPI = GraphicsAPI::OpenGL;  // or DirectX11, DirectX12
-```
-
-## Creating Custom Systems
-
-1. Implement the `ISystem` interface
-2. Export `CreateSystem()` and `DestroySystem()` functions
-3. Build as a DLL
-4. Place in `GameData/[GameType]/Systems/`
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for examples.
+This mod is in active design. Contributions, suggestions, and improvements are welcome. Please refer to the documentation for implementation details.
 
 ## License
 
-[Add license information here]
+[To be determined based on Project Zomboid modding guidelines]
