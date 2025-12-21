@@ -290,16 +290,22 @@ GUIDE_EOF
             # Copy map files to output directory
             local copied=false
             
-            if [ -d "map" ]; then
-                cp -r map/* "$OUTPUT_DIR/" 2>/dev/null && copied=true
+            if [ -d "map" ] && [ -n "$(ls -A map 2>/dev/null)" ]; then
+                cp -r map/* "$OUTPUT_DIR/" 2>/dev/null && copied=true || true
             fi
             
-            if [ -d "maps" ]; then
-                cp -r maps/* "$OUTPUT_DIR/" 2>/dev/null && copied=true
+            if [ -d "maps" ] && [ -n "$(ls -A maps 2>/dev/null)" ]; then
+                cp -r maps/* "$OUTPUT_DIR/" 2>/dev/null && copied=true || true
             fi
             
-            # Copy any TMX files found
-            find . -name "*.tmx" -type f -exec cp --parents {} "$OUTPUT_DIR/" \; 2>/dev/null && copied=true
+            # Copy any TMX files found (portable across systems)
+            if find . -name "*.tmx" -type f | grep -q .; then
+                find . -name "*.tmx" -type f -print0 | while IFS= read -r -d '' file; do
+                    target_dir="$OUTPUT_DIR/$(dirname "$file")"
+                    mkdir -p "$target_dir"
+                    cp "$file" "$target_dir/" 2>/dev/null && copied=true || true
+                done
+            fi
             
             if [ "$copied" = true ]; then
                 print_success "Map files copied to: $OUTPUT_DIR"
@@ -319,7 +325,7 @@ GUIDE_EOF
     echo "  $TEMP_DIR/pz-vanilla-map-project"
     echo ""
     echo "Output directory:"
-    echo "  $(cd $(dirname "$OUTPUT_DIR") && pwd)/$(basename "$OUTPUT_DIR")"
+    echo "  $(cd "$(dirname "$OUTPUT_DIR")" && pwd)/$(basename "$OUTPUT_DIR")"
     echo ""
     print_info "To use the extracted maps:"
     echo "  1. Review the extracted files in $OUTPUT_DIR"
