@@ -100,6 +100,29 @@ dotnet build pz-mapmap.csproj
 
 ## Extraction Workflow
 
+### Quick Start: Automated Extraction Script
+
+**The easiest way to extract maps is using the provided automation script:**
+
+```bash
+# Run the extraction script from the repository root
+./scripts/extract_map.sh
+
+# Or specify a custom output directory
+./scripts/extract_map.sh /path/to/output
+```
+
+This script will:
+1. Download community map extraction tools
+2. Extract vanilla map files to TMX/TBX format
+3. Provide manual extraction guide if automated tools are unavailable
+
+For detailed information, see [scripts/README.md](../scripts/README.md).
+
+### Manual Extraction Workflow
+
+If you prefer manual extraction or the automated script encounters issues:
+
 ### Step 1: Identify Target Areas
 
 1. Use online map viewer to find coordinates

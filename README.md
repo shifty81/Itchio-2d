@@ -39,12 +39,22 @@ Comprehensive guides are available in the `/docs` folder:
 
 See **[docs/README.md](docs/README.md)** for a complete documentation index.
 
+## Utility Scripts
+
+The `/scripts` directory contains helpful tools:
+
+- **[extract_map.sh](scripts/extract_map.sh)**: Automated map extraction tool for Project Zomboid
+  - Extracts vanilla maps for editing and customization
+  - Provides manual extraction guide if automated tools are unavailable
+  - See [scripts/README.md](scripts/README.md) for usage instructions
+
 ## Quick Start
 
 1. Review the documentation in `/docs` to understand the mod architecture
 2. Set up your Project Zomboid modding environment
-3. Follow the implementation guide to build core features
-4. Test and iterate on the gameplay mechanics
+3. (Optional) Use `./scripts/extract_map.sh` to extract maps for customization
+4. Follow the implementation guide to build core features
+5. Test and iterate on the gameplay mechanics
 
 ## Implementation Status
 
