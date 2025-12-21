@@ -29,10 +29,6 @@ NC='\033[0m' # No Color
 
 # Configuration
 VANILLA_MAP_REPO="https://github.com/cocolabs/pz-vanilla-map-project.git"
-# Alternative repositories (in case the primary is unavailable)
-ALT_REPOS=(
-    "https://github.com/quarantin/pz-mapmap.git"
-)
 DEFAULT_OUTPUT_DIR="./extracted_maps"
 TEMP_DIR="/tmp/pz-map-extraction-$$"
 
@@ -300,7 +296,9 @@ GUIDE_EOF
             # Copy any TMX files found (portable across systems)
             if find . -name "*.tmx" -type f | grep -q .; then
                 find . -name "*.tmx" -type f -print0 | while IFS= read -r -d '' file; do
-                    target_dir="$OUTPUT_DIR/$(dirname "$file")"
+                    # Strip leading ./ to avoid creating $OUTPUT_DIR/./ paths
+                    clean_file="${file#./}"
+                    target_dir="$OUTPUT_DIR/$(dirname "$clean_file")"
                     mkdir -p "$target_dir"
                     cp "$file" "$target_dir/" 2>/dev/null || true
                 done
