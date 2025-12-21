@@ -3,19 +3,23 @@
 ################################################################################
 # Project Zomboid Map Extraction Script
 # 
-# This script automates the extraction of Project Zomboid's vanilla map
-# according to the process documented in docs/MAP_MODDING.md
+# This script automates the extraction of Project Zomboid Build 41.78 vanilla map
+# from the Unjammer/PZ_Vanilla_Map-B41- repository.
+#
+# Repository: https://github.com/Unjammer/PZ_Vanilla_Map-B41-
+# Contains: 2841 cells, 117,441 rooms, based on PZ 41.78 stable
 #
 # Prerequisites:
 # - Git must be installed
-# - Sufficient disk space for the map extraction (~1GB+)
-# - Internet connection to clone the extraction tool
+# - Sufficient disk space (~2GB+ for the complete map)
+# - Internet connection to clone the repository
 #
 # Usage:
 #   ./scripts/extract_map.sh [output_directory]
 #
 # Example:
-#   ./scripts/extract_map.sh ./extracted_maps
+#   ./scripts/extract_map.sh                    # Uses default: scripts/extracted_maps
+#   ./scripts/extract_map.sh /path/to/output    # Uses custom output directory
 ################################################################################
 
 set -e  # Exit on error
@@ -28,8 +32,9 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-VANILLA_MAP_REPO="https://github.com/cocolabs/pz-vanilla-map-project.git"
-DEFAULT_OUTPUT_DIR="./extracted_maps"
+VANILLA_MAP_REPO="https://github.com/Unjammer/PZ_Vanilla_Map-B41-.git"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEFAULT_OUTPUT_DIR="$SCRIPT_DIR/extracted_maps"
 TEMP_DIR="/tmp/pz-map-extraction-$$"
 
 ################################################################################
@@ -87,10 +92,14 @@ main() {
     # Set output directory
     OUTPUT_DIR="${1:-$DEFAULT_OUTPUT_DIR}"
     
-    echo "This script will extract Project Zomboid's vanilla map data"
-    echo "using the community-maintained Vanilla Map Exporter tool."
+    echo "This script will extract Project Zomboid Build 41.78 vanilla map data"
+    echo "from the Unjammer/PZ_Vanilla_Map-B41- repository."
     echo ""
+    echo "Repository: $VANILLA_MAP_REPO"
     echo "Output directory: $OUTPUT_DIR"
+    echo ""
+    echo "Note: This repository contains ~130,000 map files (~2GB+)"
+    echo "      The download may take several minutes."
     echo ""
     
     # Check prerequisites
@@ -128,10 +137,11 @@ main() {
     print_success "Temporary directory created: $TEMP_DIR"
     
     # Clone the Vanilla Map Exporter repository
-    print_header "Cloning Vanilla Map Exporter"
+    print_header "Downloading PZ Build 41.78 Vanilla Map"
     
     print_info "Cloning from: $VANILLA_MAP_REPO"
-    print_info "This may take a few minutes..."
+    print_warning "This repository is large (~130k files). The download may take 5-10 minutes..."
+    echo ""
     
     local clone_success=false
     
@@ -265,86 +275,102 @@ GUIDE_EOF
     cd "$TEMP_DIR/pz-vanilla-map-project"
     
     # Check if README exists and display extraction instructions
-    print_header "Extraction Instructions"
+    print_header "Copying Extracted Map Files"
     
     if [ -f "README.md" ]; then
-        print_info "The Vanilla Map Exporter has been downloaded."
+        print_info "Map repository successfully downloaded."
         echo ""
-        print_warning "IMPORTANT: Please read the repository's README.md for specific extraction instructions."
-        echo ""
-        print_info "The repository typically contains:"
-        echo "  - Pre-extracted map files (TMX/TBX format)"
-        echo "  - Instructions for updating to latest PZ version"
-        echo "  - Documentation on map structure"
+        print_info "Repository contains:"
+        echo "  - 2841 exported cells in TMX format"
+        echo "  - 117,441 rooms with building data (TBX files)"
+        echo "  - Based on Project Zomboid 41.78 (stable)"
+        echo "  - Kentucky_full.pzw for WorldEd/TileZed"
         echo ""
         
         # Check if map files already exist in the repository
-        if [ -d "map" ] || [ -d "maps" ] || find . -name "*.tmx" -type f 2>/dev/null | grep -q .; then
-            print_success "Map files detected in repository!"
+        print_info "Copying map files to output directory..."
+        echo ""
+        
+        # Copy all relevant map files to output directory
+        local files_copied=0
+        
+        # Copy TMX files (map cells)
+        if [ -d "tmx" ] && [ -n "$(ls -A tmx 2>/dev/null)" ]; then
+            print_info "Copying TMX map cells..."
+            mkdir -p "$OUTPUT_DIR/tmx"
+            cp -r tmx/* "$OUTPUT_DIR/tmx/" 2>/dev/null || true
+            files_copied=$((files_copied + 1))
+        fi
+        
+        # Copy full Kentucky world file
+        if [ -f "Kentucky_full.pzw" ]; then
+            print_info "Copying Kentucky_full.pzw..."
+            cp Kentucky_full.pzw "$OUTPUT_DIR/" 2>/dev/null || true
+            files_copied=$((files_copied + 1))
+        fi
+        
+        # Copy map images
+        if [ -f "Map.png" ]; then
+            print_info "Copying map reference images..."
+            cp Map*.png "$OUTPUT_DIR/" 2>/dev/null || true
+            files_copied=$((files_copied + 1))
+        fi
+        
+        # Copy README for reference
+        if [ -f "README.md" ]; then
+            cp README.md "$OUTPUT_DIR/REPOSITORY_README.md" 2>/dev/null || true
+        fi
+        
+        # Copy map directories (Challenge, Kingsmouth, KnoxCounty, etc.)
+        for dir in Challenge1 Challenge2 Kingsmouth KnoxCounty Studio Tutorial; do
+            if [ -d "$dir" ]; then
+                print_info "Copying $dir..."
+                cp -r "$dir" "$OUTPUT_DIR/" 2>/dev/null || true
+                files_copied=$((files_copied + 1))
+            fi
+        done
+        
+        echo ""
+        if [ $files_copied -gt 0 ]; then
+            print_success "Map files successfully copied to: $OUTPUT_DIR"
             echo ""
-            print_info "Copying extracted map files to output directory..."
-            
-            # Copy map files to output directory
-            if [ -d "map" ] && [ -n "$(ls -A map 2>/dev/null)" ]; then
-                cp -r map/* "$OUTPUT_DIR/" 2>/dev/null || true
-            fi
-            
-            if [ -d "maps" ] && [ -n "$(ls -A maps 2>/dev/null)" ]; then
-                cp -r maps/* "$OUTPUT_DIR/" 2>/dev/null || true
-            fi
-            
-            # Copy any TMX files found (portable across systems)
-            if find . -name "*.tmx" -type f | grep -q .; then
-                find . -name "*.tmx" -type f -print0 | while IFS= read -r -d '' file; do
-                    # Strip leading ./ to avoid creating $OUTPUT_DIR/./ paths
-                    clean_file="${file#./}"
-                    target_dir="$OUTPUT_DIR/$(dirname "$clean_file")"
-                    mkdir -p "$target_dir"
-                    cp "$file" "$target_dir/" 2>/dev/null || true
-                done
-            fi
-            
-            # Check if any files were actually copied by looking at output directory
-            if [ -n "$(ls -A "$OUTPUT_DIR" 2>/dev/null)" ]; then
-                print_success "Map files copied to: $OUTPUT_DIR"
-            else
-                print_warning "No map files were copied (directory might be empty)"
-            fi
+            print_info "Files included:"
+            echo "  - tmx/: Directory with 2841 map cell files"
+            echo "  - Kentucky_full.pzw: Full world file for WorldEd"
+            echo "  - Map images: Visual references"
+            echo "  - Map directories: Challenge, Kingsmouth, KnoxCounty, etc."
         else
-            print_warning "No pre-extracted map files found in repository"
-            print_info "You may need to run the extraction tool manually"
+            print_warning "No map files were found to copy"
         fi
     fi
     
     # Provide next steps
-    print_header "Next Steps"
+    print_header "Extraction Complete"
     
-    echo "Map extraction repository is located at:"
-    echo "  $TEMP_DIR/pz-vanilla-map-project"
+    echo "Map files have been extracted to:"
+    echo "  $(cd "$(dirname "$OUTPUT_DIR")" 2>/dev/null && pwd)/$(basename "$OUTPUT_DIR")"
     echo ""
-    echo "Output directory:"
-    echo "  $(cd "$(dirname "$OUTPUT_DIR")" && pwd)/$(basename "$OUTPUT_DIR")"
+    print_success "Repository Information:"
+    echo "  - Build: Project Zomboid 41.78 (stable)"
+    echo "  - Cells: 2841 exported map cells"
+    echo "  - Rooms: 117,441 building rooms"
+    echo "  - Format: TMX/TBX (editable with WorldEd/TileZed)"
     echo ""
     print_info "To use the extracted maps:"
-    echo "  1. Review the extracted files in $OUTPUT_DIR"
-    echo "  2. Use TileZed (ProjectZomboid/Tools/TileZed/) to edit TMX files"
-    echo "  3. Follow docs/MAP_MODDING.md for integration steps"
+    echo "  1. Open WorldEd or TileZed (ProjectZomboid/Tools/)"
+    echo "  2. Load Kentucky_full.pzw from the output directory"
+    echo "  3. Edit individual cells from the tmx/ directory"
+    echo "  4. Follow docs/MAP_MODDING.md for integration with The Infection mod"
     echo ""
-    print_info "To manually run extraction (if needed):"
-    echo "  1. cd $TEMP_DIR/pz-vanilla-map-project"
-    echo "  2. Follow instructions in README.md"
-    echo "  3. Check for extraction scripts or tools"
-    echo ""
-    print_warning "Note: The temporary directory will be cleaned up automatically"
-    print_info "If you need to keep it, copy it before the script exits:"
-    echo "  cp -r $TEMP_DIR/pz-vanilla-map-project /your/desired/location"
+    print_warning "Note: You'll need proper tilesheets to edit the maps."
+    echo "  See REPOSITORY_README.md in output directory for details."
     echo ""
     
     # Ask if user wants to keep temp directory
-    read -p "Do you want to keep the temporary directory for manual extraction? (y/N): " -n 1 -r
+    read -p "Do you want to keep the temporary cloned repository? (y/N): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        print_success "Temporary directory preserved: $TEMP_DIR"
+        print_success "Temporary repository preserved: $TEMP_DIR/pz-vanilla-map-project"
         print_warning "Remember to clean it up manually when done!"
         return 0
     fi
@@ -354,8 +380,8 @@ GUIDE_EOF
     cleanup
     print_success "Temporary files removed"
     
-    print_header "Extraction Complete"
-    print_success "Map extraction process completed successfully!"
+    print_header "Map Extraction Complete"
+    print_success "All map files have been successfully extracted!"
     echo ""
 }
 

@@ -36,24 +36,30 @@ Each file represents a 300x300 tile "cell" in the game world.
 
 ### 1. Vanilla Map Exporter
 
-**GitHub**: https://github.com/cocolabs/pz-vanilla-map-project
+**Primary Repository (Recommended)**: https://github.com/Unjammer/PZ_Vanilla_Map-B41-
 
-Extracts the entire vanilla map to editable TMX/TBX files.
+Contains complete Project Zomboid 41.78 vanilla map pre-extracted to TMX/TBX format.
 
 **Features**:
-- Converts .bin files to TMX format
-- Organized by rooms and buildings
-- Preserves objects and properties
-- Regular updates for new PZ builds
+- 2841 exported map cells
+- 117,441 rooms with building data
+- Based on Project Zomboid 41.78 (stable)
+- All buildings exported room by room (TBX files)
+- Kentucky_full.pzw for WorldEd/TileZed
+- Regular format compatible with official tools
 
 **Usage**:
 ```bash
-# Clone repository
-git clone https://github.com/cocolabs/pz-vanilla-map-project.git
+# Using the automated script (recommended)
+./scripts/extract_map.sh
 
-# Follow repository instructions for extraction
-# Output: TMX/TBX files in organized folders
+# Or manually clone the repository
+git clone https://github.com/Unjammer/PZ_Vanilla_Map-B41-.git
 ```
+
+**Alternative Repository**: https://github.com/cocolabs/pz-vanilla-map-project
+
+Community-maintained map extraction tools and documentation.
 
 ### 2. TileZed (Official Map Editor)
 
@@ -137,15 +143,27 @@ If you prefer manual extraction or the automated script encounters issues:
 
 ### Step 2: Extract Map Data
 
+**Option 1: Using the Automated Script (Recommended)**
 ```bash
-# Using Vanilla Map Exporter
-cd pz-vanilla-map-project
+# Run from the repository root
+./scripts/extract_map.sh
 
-# Run extraction script (follow repo instructions)
-./extract-vanilla-map.sh
+# Maps will be extracted to scripts/extracted_maps/
+# Contains 2841 cells in TMX format with all building data
+```
 
-# Output location:
-# output/maps/<MapName>/
+**Option 2: Manual Clone**
+```bash
+# Clone the Unjammer repository
+git clone https://github.com/Unjammer/PZ_Vanilla_Map-B41-.git
+
+# Navigate to the repository
+cd PZ_Vanilla_Map-B41-
+
+# Map files are already extracted:
+# - tmx/: 2841 map cell files
+# - Kentucky_full.pzw: Full world file
+# - Various map directories (Challenge, Kingsmouth, etc.)
 ```
 
 ### Step 3: Edit in TileZed
@@ -503,9 +521,14 @@ Events.OnChunkLoaded.Add(InfectionMap.onChunkLoad)
 
 ### Tools and Downloads
 
+- **Unjammer's PZ Vanilla Map (B41)**: https://github.com/Unjammer/PZ_Vanilla_Map-B41-
+  - Pre-extracted Build 41.78 maps (recommended)
+  - Use with automated script: `./scripts/extract_map.sh`
 - **Vanilla Map Exporter**: https://github.com/cocolabs/pz-vanilla-map-project
+  - Alternative community tools
 - **pz-mapmap**: https://github.com/quarantin/pz-mapmap
 - **TileZed**: Included with Project Zomboid
+- **WorldEd**: Included with Project Zomboid
 - **Online Map**: https://map.projectzomboid.com
 
 ### Video Tutorials
