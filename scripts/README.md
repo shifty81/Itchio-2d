@@ -57,6 +57,7 @@ Automates the extraction of Project Zomboid Build 41.78 vanilla map data from th
 5. Note: You'll need proper tilesheets to edit maps (see REPOSITORY_README.md in output)
 
 **Related Documentation:**
+- `EXTRACTION_GUIDE.md` - Comprehensive extraction and usage guide
 - `docs/MAP_MODDING.md` - Complete map modding guide
 - `docs/TECHNICAL_IMPLEMENTATION.md` - Integration details
 
