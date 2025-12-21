@@ -140,11 +140,12 @@ main() {
     local clone_success=false
     
     # Use GIT_TERMINAL_PROMPT=0 to prevent interactive prompts
-    if GIT_TERMINAL_PROMPT=0 git clone --depth 1 "$VANILLA_MAP_REPO" "$TEMP_DIR/pz-vanilla-map-project" 2>&1 | sed 's/^/  /'; then
-        if [ -d "$TEMP_DIR/pz-vanilla-map-project" ]; then
-            print_success "Repository cloned successfully"
-            clone_success=true
-        fi
+    # Capture output and check directory existence for success
+    GIT_TERMINAL_PROMPT=0 git clone --depth 1 "$VANILLA_MAP_REPO" "$TEMP_DIR/pz-vanilla-map-project" 2>&1 | sed 's/^/  /'
+    
+    if [ -d "$TEMP_DIR/pz-vanilla-map-project/.git" ]; then
+        print_success "Repository cloned successfully"
+        clone_success=true
     fi
     
     if [ "$clone_success" = false ]; then
@@ -288,14 +289,12 @@ GUIDE_EOF
             print_info "Copying extracted map files to output directory..."
             
             # Copy map files to output directory
-            local copied=false
-            
             if [ -d "map" ] && [ -n "$(ls -A map 2>/dev/null)" ]; then
-                cp -r map/* "$OUTPUT_DIR/" 2>/dev/null && copied=true || true
+                cp -r map/* "$OUTPUT_DIR/" 2>/dev/null || true
             fi
             
             if [ -d "maps" ] && [ -n "$(ls -A maps 2>/dev/null)" ]; then
-                cp -r maps/* "$OUTPUT_DIR/" 2>/dev/null && copied=true || true
+                cp -r maps/* "$OUTPUT_DIR/" 2>/dev/null || true
             fi
             
             # Copy any TMX files found (portable across systems)
@@ -303,11 +302,12 @@ GUIDE_EOF
                 find . -name "*.tmx" -type f -print0 | while IFS= read -r -d '' file; do
                     target_dir="$OUTPUT_DIR/$(dirname "$file")"
                     mkdir -p "$target_dir"
-                    cp "$file" "$target_dir/" 2>/dev/null && copied=true || true
+                    cp "$file" "$target_dir/" 2>/dev/null || true
                 done
             fi
             
-            if [ "$copied" = true ]; then
+            # Check if any files were actually copied by looking at output directory
+            if [ -n "$(ls -A "$OUTPUT_DIR" 2>/dev/null)" ]; then
                 print_success "Map files copied to: $OUTPUT_DIR"
             else
                 print_warning "No map files were copied (directory might be empty)"
